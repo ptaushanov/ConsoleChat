@@ -1,0 +1,31 @@
+{
+  "name": "consolechat",
+  "version": "0.0.5",
+  "description": "Have a chat and type commands",
+  "main": "server.js",
+  "dependencies": {
+    "bulma": "^0.7.5",
+    "dotenv": "^8.1.0",
+    "ejs": "^2.7.1",
+    "express": "^4.17.1",
+    "moment": "^2.24.0",
+    "mongodb": "^3.3.2",
+    "socket.io": "^2.2.0",
+    "uuid-token-generator": "^1.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^1.19.4"
+  },
+  "scripts": {
+    "dev": " nodemon server.js",
+    "start": "node server.js"
+  },
+  "keywords": [
+    "chat",
+    "console",
+    "terminal",
+    "websockets"
+  ],
+  "author": "SpleefDinamix",
+  "license": "MIT"
+}

@@ -1,0 +1,117 @@
+body,
+html {
+    height: 100%;
+}
+
+.bg {
+    display: block;
+    position: fixed;
+    width: 100%;
+    z-index: -10;
+
+    /* The image used */
+    background-image: url("../assets/console/background.png");
+
+    /* Full height */
+    height: 100%;
+
+    /* Center and scale the image nicely */
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.trim-tb {
+    padding-top: 0.45rem !important;
+    padding-bottom: 0.45rem !important;
+}
+
+.is-grey {
+    background-color: #1f1f29 !important;
+}
+
+.message {
+    background: none;
+    animation: transitionIn 1s;
+    -webkit-animation: transitionIn 1s;
+    -moz-animation: transitionIn 1s;
+    -o-animation: transitionIn 1s;
+}
+
+.feed-anim {
+    animation: transitionIn 0.75s;
+    -webkit-animation: transitionIn 0.75s;
+    -moz-animation: transitionIn 0.75s;
+    -o-animation: transitionIn 0.75s;
+}
+
+.is-newblu {
+    background: rgba(16, 23, 37, 0.75) !important;
+}
+
+.hero-body h6 {
+    font-size: 13pt;
+}
+
+#feedback {
+    min-height: 26rem;
+    max-height: 26rem;
+    margin-bottom: 35px;
+    overflow: scroll;
+    scroll-behavior: smooth;
+    -ms-overflow-style: none;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+#feedback::-webkit-scrollbar {
+    display: none;
+}
+
+.mono {
+    font-family: "Ubuntu Mono", monospace;
+}
+
+.system {
+    font-family: "Roboto Mono", monospace;
+    font-weight: bold;
+    font-size: 10.5pt;
+    color: springgreen;
+}
+
+.system-info {
+    color: deepskyblue;
+}
+
+.system-error {
+    color: crimson;
+}
+
+.system-warning {
+    color: yellow;
+}
+
+.new-message {
+    font-family: "Roboto Mono", monospace;
+    font-weight: bold;
+    font-size: 11pt;
+    color: #ff9100;
+}
+
+@media screen and (min-width: 1024px) {
+    .section {
+        padding: 4rem 6rem;
+    }
+}
+
+@keyframes transitionIn {
+    from {
+        opacity: 0;
+        transform: rotateX(-10deg);
+    }
+
+    to {
+        opacity: 1;
+        transform: rotateX(0)
+    }
+}
