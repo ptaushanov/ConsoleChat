@@ -3,5 +3,6 @@
     "\\login",
     "\\logout",
     "\\register",
-    "\\list"
+    "\\list",
+    "\\rewind"
 ]

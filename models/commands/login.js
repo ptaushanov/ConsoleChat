@@ -2,13 +2,13 @@ const mongo = require("mongodb");
 const fs = require("fs");
 const path = require("path");
 
+//Importing .env configurations
+require('dotenv').config();
+
 // Database using MongoDB
 const MongoClient = mongo.MongoClient;
 const URI = process.env.DB_URI;
 const DB = process.env.DB_NAME;
-
-//Importing .env configurations
-require('dotenv').config();
 
 exports.login = (socket, ...args) => {
 
@@ -70,6 +70,8 @@ exports.login = (socket, ...args) => {
                             message: `You are currently in the \"#${channel}\" channel.
                             To see available channels type: \"\\list channels\"`
                         })
+                        const rewind = require("./rewind");
+                        rewind["rewind"](socket, "messages", 1, "days");
                     }, 2500)
                 } else {
                     socket.emit("server-error", {

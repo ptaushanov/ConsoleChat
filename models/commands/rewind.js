@@ -1,4 +1,22 @@
+const moment = require("moment");
+const mongo = require("mongodb");
+
+require('dotenv').config();
+
+// Database using MongoDB
+const MongoClient = mongo.MongoClient;
+const URI = process.env.DB_URI;
+const DB = process.env.DB_NAME;
+
 exports.rewind = (socket, ...args) => {
+
+    if (activeUsers.findIndex(x => x.sockID === socket.id) === -1) {
+        socket.emit("server-error", {
+            from: "System",
+            message: "Error! You are not logged in!"
+        })
+        return;
+    }
 
     const definitions = {
         "today": 0,
@@ -38,6 +56,57 @@ exports.rewind = (socket, ...args) => {
             })
         } else {
             // Send messages to user 
+            try {
+                const lookupDate = moment()
+                    .subtract(rewindDays, "days")
+                    .format("YYYY-MM-DD")
+
+                console.log(lookupDate);
+
+                const client = new MongoClient(URI, {
+                    useNewUrlParser: true,
+                    useUnifiedTopology: true
+                });
+
+                client.connect((err) => {
+                    const db = client.db(DB);
+
+                    if (err) {
+                        console.error(err);
+                    }
+
+                    // Database logic
+                    db.collection("Channels")
+                        .find({
+                            name: "General",
+                            messages: {
+                                $elemMatch: {
+                                    date: {
+                                        "$gte": new Date(lookupDate)
+                                    }
+                                }
+                            }
+                        })
+                        .toArray()
+                        .then(result => {
+                            result[0].messages.forEach(msg => {
+                                socket.emit("message-sent-success", {
+                                    from: msg.from,
+                                    message: msg.message,
+                                    time: msg.time,
+                                    color: msg.color
+                                })
+                            })
+                            client.close;
+                        })
+                        .catch(err => {
+                            console.error(err);
+                        })
+                    client.close();
+                })
+            } catch (err) {
+                console.error(err);
+            }
         }
     } else {
         socket.emit("server-error", {

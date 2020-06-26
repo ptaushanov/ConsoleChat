@@ -96,8 +96,8 @@ io.on("connection", (socket) => {
                                             messages: {
                                                 from: activeUsers[activeUserIdx].username,
                                                 message: data.text,
-                                                time: moment().format('HH:mm'),
-                                                date: moment().format("DD.MM.YYYY"),
+                                                time: moment().format("HH:mm"),
+                                                date: new Date(moment().format("YYYY-MM-DD")),
                                                 color: activeUsers[activeUserIdx].color
                                             }
                                         }
