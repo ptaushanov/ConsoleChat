@@ -65,6 +65,13 @@ io.on("connection", (socket) => {
                 console.log(commandParts)
                 manageCommands(socket, ...commandParts);
             } else {
+                if (data.text.length > 250) {
+                    socket.emit("server-error", {
+                        from: "System",
+                        message: "Error! Message length limit is 250!"
+                    })
+                    return;
+                }
                 const activeUserIdx = activeUsers.findIndex(x => x.sockID === socket.id)
                 if (activeUserIdx !== -1) {
                     for (let user of activeUsers) {
