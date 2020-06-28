@@ -1,4 +1,5 @@
 const mongo = require("mongodb");
+const bcrypt = require('bcrypt');
 const fs = require("fs");
 const path = require("path");
 
@@ -45,34 +46,40 @@ exports.login = (socket, ...args) => {
         // Database logic
         const query = {
             username: args[0],
-            password: args[1]
         }
         db.collection("Users")
             .find(query)
             .toArray()
             .then(result => {
                 if (result.length > 0) {
-                    const channel = "General"
-                    activeUsers.push({
-                        sockID: socket.id,
-                        authToken: result[0].token,
-                        username: result[0].username,
-                        channel: channel,
-                        color: userColors.default[Math.floor(Math.random() * userColors.default.length)]
-                    })
-                    socket.emit("server-success", {
-                        from: "System",
-                        message: `You are now logged in as ${result[0].username}.`,
-                    })
-                    setTimeout(() => {
-                        socket.emit("info-message", {
-                            from: "🛈Info",
-                            message: `You are currently in the \"#${channel}\" channel.
-                            To see available channels type: \"\\list channels\"`
+                    if (bcrypt.compareSync(args[1], result[0].password)) {
+                        const channel = "General"
+                        activeUsers.push({
+                            sockID: socket.id,
+                            authToken: result[0].token,
+                            username: result[0].username,
+                            channel: channel,
+                            color: userColors.default[Math.floor(Math.random() * userColors.default.length)]
                         })
-                        const rewind = require("./rewind");
-                        rewind["rewind"](socket, "messages", 1, "days");
-                    }, 2500)
+                        socket.emit("server-success", {
+                            from: "System",
+                            message: `You are now logged in as ${result[0].username}.`,
+                        })
+                        setTimeout(() => {
+                            socket.emit("info-message", {
+                                from: "🛈Info",
+                                message: `You are currently in the \"#${channel}\" channel.
+                            To see available channels type: \"\\list channels\"`
+                            })
+                            const rewind = require("./rewind");
+                            rewind["rewind"](socket, "messages", 1, "days");
+                        }, 2500)
+                    } else {
+                        socket.emit("server-error", {
+                            from: "System",
+                            message: "Error! Wrong password!"
+                        })
+                    }
                 } else {
                     socket.emit("server-error", {
                         from: "System",

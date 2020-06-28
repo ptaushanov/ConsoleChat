@@ -1,4 +1,5 @@
 const mongo = require("mongodb");
+const bcrypt = require('bcrypt');
 const TokenGenerator = require('uuid-token-generator');
 
 // Database using MongoDB
@@ -57,7 +58,7 @@ exports.register = (socket, ...args) => {
                     db.collection("Users")
                         .insertOne({
                             username: args[0],
-                            password: args[1],
+                            password: bcrypt.hashSync(args[1], 10),
                             token: tokgen.generate()
                         }, (err, res) => {
                             if (err) {

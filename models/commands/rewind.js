@@ -89,7 +89,7 @@ exports.rewind = (socket, ...args) => {
                         })
                         .toArray()
                         .then(result => {
-                            result[0].messages.forEach(msg => {
+                            result[0].messages.forEach(msg => { //Breakes if no messages are received
                                 socket.emit("message-sent-success", {
                                     from: msg.from,
                                     message: msg.message,
