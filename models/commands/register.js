@@ -14,7 +14,7 @@ require('dotenv').config();
 exports.register = (socket, ...args) => {
 
     if (activeUsers.findIndex(x => x.sockID === socket.id) !== -1) {
-        socket.emit("login-error", {
+        socket.emit("server-error", {
             from: "System",
             message: "Error! You can't register a user while you are logged in!"
         })
@@ -59,7 +59,8 @@ exports.register = (socket, ...args) => {
                         .insertOne({
                             username: args[0],
                             password: bcrypt.hashSync(args[1], 10),
-                            token: tokgen.generate()
+                            token: tokgen.generate(),
+                            role: "Basic"
                         }, (err, res) => {
                             if (err) {
                                 console.error(err);

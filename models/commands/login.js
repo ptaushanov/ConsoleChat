@@ -59,7 +59,8 @@ exports.login = (socket, ...args) => {
                             authToken: result[0].token,
                             username: result[0].username,
                             channel: channel,
-                            color: userColors.default[Math.floor(Math.random() * userColors.default.length)]
+                            color: userColors.default[Math.floor(Math.random() * userColors.default.length)],
+                            role: result[0].role
                         })
                         socket.emit("server-success", {
                             from: "System",

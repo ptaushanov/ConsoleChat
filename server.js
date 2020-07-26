@@ -50,7 +50,7 @@ io.on("connection", (socket) => {
     socket.emit("info-message", {
         from: "System",
         message: `Welcome to ConsoleChat! Type \"\\login <username> <password>\" to log  
-        into your account or use\ "\\register <username> <password>\" to register a new one.`
+        into your account or use \"\\register <username> <password>\" to register a new one.`
     })
 
     socket.on("message", (data) => {
