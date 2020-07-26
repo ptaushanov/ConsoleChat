@@ -8,6 +8,24 @@ const MongoClient = mongo.MongoClient;
 const URI = process.env.DB_URI;
 const DB = process.env.DB_NAME;
 
+const setRole = (username, role) => {
+    const activeID = activeUsers.findIndex(x => x.username === username)
+    if (activeID !== -1) {
+        activeUsers[activeID].role = role;
+    }
+}
+
+const setRoleDB = (db, username, role) => {
+    db.collection("Users")
+        .updateOne({
+            username: username
+        }, {
+            $set: {
+                "role": role
+            }
+        })
+}
+
 exports.set = (socket, ...args) => {
     const evokerID = activeUsers.findIndex(x => x.sockID === socket.id)
     if (evokerID === -1) {
@@ -33,10 +51,12 @@ exports.set = (socket, ...args) => {
 
     if (args[0] === "role") {
         const evokerRole = activeUsers[evokerID].role
+        const username = args[1];
 
         const query = {
-            username: args[1],
+            username: username,
         }
+
         client.connect((err) => {
             const db = client.db(DB);
 
@@ -51,9 +71,11 @@ exports.set = (socket, ...args) => {
                     if (result.length > 0) {
                         if (evokerRole === "Mod") {
                             if (args[2].toLowerCase() === "helper") {
-                                //set the role in DB and Server
+                                setRole(username, "Helper")
+                                setRoleDB(db, username, "Helper")
                             } else if (args[2].toLowerCase() === "basic") {
-                                //set the role in DB and Server
+                                setRole(username, "Basic")
+                                setRoleDB(db, username, "Basic")
                             } else {
                                 socket.emit("server-error", {
                                     from: "System",
@@ -63,13 +85,16 @@ exports.set = (socket, ...args) => {
                         } else if (evokerRole === "Admin") {
                             switch (args[2].toLowerCase()) {
                                 case 'mod':
-                                    //set the role in DB and Server
+                                    setRole(username, "Mod")
+                                    setRoleDB(db, username, "Mod")
                                     break;
                                 case 'helper':
-                                    //set the role in DB and Server
+                                    setRole(username, "Helper")
+                                    setRoleDB(db, username, "Helper")
                                     break;
                                 case 'basic':
-                                    //set the role in DB and Server
+                                    setRole(username, "Basic")
+                                    setRoleDB(db, username, "Basic")
                                     break;
                                 default:
                                     socket.emit("server-error", {
@@ -95,7 +120,6 @@ exports.set = (socket, ...args) => {
                     console.error(err);
                     client.close();
                 })
-            client.close();
         })
     } else {
         socket.emit("server-error", {
@@ -103,4 +127,5 @@ exports.set = (socket, ...args) => {
             message: `Error! Unknown paramiter \"${args[0]}\"!`
         })
     }
+    client.close();
 }
