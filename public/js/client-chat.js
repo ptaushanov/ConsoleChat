@@ -24,11 +24,6 @@ const createMSG = (data, ...classes) => {
     feedback.scrollTop = feedback.scrollHeight;
 }
 
-const clear = (data) => {
-    feedback.innerHTML = "";
-    createSystemMSG(data, "system", "system-info", "feed-anim");
-}
-
 sendBTN.addEventListener("click", () => {
     socket.emit("message", {
         text: input.value
@@ -63,5 +58,5 @@ socket.on("message-sent-success", (data) => {
 })
 
 socket.on("clear", (data) => {
-    clear(data);
+    feedback.innerHTML = "";
 })

@@ -26,6 +26,13 @@ const setRoleDB = (db, username, role) => {
         })
 }
 
+const sendRoleMSG = (socket, username, role) => {
+    socket.emit("server-success", {
+        from: "System",
+        message: `Successfully set ${username}'s role to ${role}.`
+    });
+}
+
 exports.set = (socket, ...args) => {
     const evokerID = activeUsers.findIndex(x => x.sockID === socket.id)
     if (evokerID === -1) {
@@ -69,13 +76,26 @@ exports.set = (socket, ...args) => {
                 .toArray()
                 .then(result => {
                     if (result.length > 0) {
-                        if (evokerRole === "Mod") {
+                        if (evokerRole === "Helper") {
+                            if (args[2].toLowerCase() === "basic") {
+                                setRole(username, "Basic")
+                                setRoleDB(db, username, "Basic")
+                                sendRoleMSG(socket, username, "Basic")
+                            } else {
+                                socket.emit("server-error", {
+                                    from: "System",
+                                    message: `Error! Not enough permissions or invalid \"role\" argument!`
+                                })
+                            }
+                        } else if (evokerRole === "Mod") {
                             if (args[2].toLowerCase() === "helper") {
                                 setRole(username, "Helper")
                                 setRoleDB(db, username, "Helper")
+                                sendRoleMSG(socket, username, "Helper")
                             } else if (args[2].toLowerCase() === "basic") {
                                 setRole(username, "Basic")
                                 setRoleDB(db, username, "Basic")
+                                sendRoleMSG(socket, username, "Basic")
                             } else {
                                 socket.emit("server-error", {
                                     from: "System",
@@ -87,14 +107,17 @@ exports.set = (socket, ...args) => {
                                 case 'mod':
                                     setRole(username, "Mod")
                                     setRoleDB(db, username, "Mod")
+                                    sendRoleMSG(socket, username, "Mod")
                                     break;
                                 case 'helper':
                                     setRole(username, "Helper")
                                     setRoleDB(db, username, "Helper")
+                                    sendRoleMSG(socket, username, "Helper")
                                     break;
                                 case 'basic':
                                     setRole(username, "Basic")
                                     setRoleDB(db, username, "Basic")
+                                    sendRoleMSG(socket, username, "Basic")
                                     break;
                                 default:
                                     socket.emit("server-error", {
