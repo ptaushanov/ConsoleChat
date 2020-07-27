@@ -31,8 +31,12 @@ html {
     background-color: rgb(31, 31, 41) !important;
 }
 
+.section,
 .message {
-    background: none;
+    background: inherit;
+}
+
+.message {
     animation: transitionIn 1s;
     -webkit-animation: transitionIn 1s;
     -moz-animation: transitionIn 1s;
