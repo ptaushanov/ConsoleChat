@@ -1,6 +1,7 @@
 const feedback = document.getElementById("feedback");
 const input = document.getElementById("input");
 const sendBTN = document.getElementById("sendBTN");
+const counter = document.getElementById("online-users");
 
 const server = location.origin;
 const socket = io.connect(server, () => {
@@ -57,6 +58,10 @@ socket.on("message-sent-success", (data) => {
     createMSG(data, "new-message", "feed-anim")
 })
 
-socket.on("clear", (data) => {
+socket.on("user-count", (count) => {
+    counter.innerText = "Online: " + count;
+})
+
+socket.on("clear", () => {
     feedback.innerHTML = "";
 })

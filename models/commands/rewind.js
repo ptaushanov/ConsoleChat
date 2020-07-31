@@ -90,7 +90,7 @@ exports.rewind = (socket, ...args) => {
                         .toArray()
                         .then(result => {
                             if (result.length == 0) return;
-                            result[0].messages.forEach(msg => { //Breakes if no messages are received
+                            result[0].messages.forEach(msg => {
                                 socket.emit("message-sent-success", {
                                     from: msg.from,
                                     message: msg.message,

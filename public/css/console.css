@@ -98,14 +98,33 @@ html {
     display: none;
 }
 
+#input {
+    background: transparent !important;
+    color: #ffffff;
+}
+
+#input::placeholder {
+    color: #bebebe;
+}
+
+#sendBTN {
+    vertical-align: middle;
+    padding-left: 0.4rem;
+    padding-right: 0.6rem;
+    font-family: "Roboto Mono";
+}
+
+#sendBTN i {
+    margin-right: 2px;
+}
+
 .mono {
     font-family: "Ubuntu Mono", monospace;
 }
 
 .system {
     font-family: "Roboto Mono", monospace;
-    font-weight: bold;
-    font-size: 10.5pt;
+    font-size: 11pt;
     color: springgreen;
 }
 
@@ -123,8 +142,8 @@ html {
 
 .new-message {
     font-family: "Roboto Mono", monospace;
-    font-weight: bold;
     font-size: 11pt;
+    font-weight: bold;
     color: #ff9100;
 }
 

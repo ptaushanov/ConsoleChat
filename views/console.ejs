@@ -1,63 +1,66 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <link
-            href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap"
-            rel="stylesheet">
-        <link
-            href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap"
-            rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="css/bulma.css">
-        <link rel="stylesheet" type="text/css" href="css/console.css">
-        <script defer src="js/fontawesome.js"></script>
-        <title>ConsoleChat</title>
-    </head>
 
-    <body class="bg">
-        <div class="hero is-small is-grey is-hidden-touch">
-            <div class="hero-body trim-tb">
-                <h6 class="title has-text-white mono"><i class="fa fa-terminal"></i>
-                    <span>ConsoleChat</span>
-                </h6>
-            </div>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="https://fonts.googleapis.com/css?family=Ubuntu+Mono&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto+Mono&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="css/bulma.css">
+    <link rel="stylesheet" type="text/css" href="css/console.css">
+    <script defer src="js/fontawesome.js"></script>
+    <title>ConsoleChat</title>
+</head>
+
+<body class="bg">
+    <div class="hero is-small is-grey is-hidden-touch">
+        <div class="hero-body trim-tb">
+            <h6 class="title has-text-white mono"><i class="fa fa-terminal"></i>
+                <span>ConsoleChat</span>
+                <span id="online-users" style="float: right;">Online: 0</span>
+            </h6>
         </div>
+    </div>
 
-        <section class="section">
-            <div class="message has-shadow">
-                <div class="message-header trim-tb has-text-weight-semibold
+    <section class="section">
+        <div class="message has-shadow">
+            <div class="message-header trim-tb has-text-weight-semibold
                     dark-acrylic">
-                    <p>Terminal</p>
-                    <p>
-                        <i class="fa fa-circle has-text-warning"></i>
-                        <i class="fa fa-circle has-text-success"></i>
-                        <i class="fa fa-circle has-text-danger"></i>
+                <p>
+                    <i class="fa fa-code"></i>
+                    Terminal
+                </p>
+                <p>
+                    <i class="fa fa-circle has-text-warning"></i>
+                    <i class="fa fa-circle has-text-success"></i>
+                    <i class="fa fa-circle has-text-danger"></i>
+                </p>
+            </div>
+            <div class="message-body acrylic">
+                <div id="feedback">
+                    <!-- Feedback -->
+                </div>
+                <div class="field is-grouped">
+                    <p class="control has-icons-left is-expanded">
+                        <input class="input has-background-white-ter" id="input" type="text" placeholder="Message"
+                            maxlength="250">
+                        <span class="icon is-small is-left">
+                            <i class="fas fa-comment"></i>
+                        </span>
+                    </p>
+                    <p class="control">
+                        <a class="button is-info is-inverted is-outlined" id="sendBTN">
+                            <i class="fas fa-paper-plane"></i> Send
+                        </a>
                     </p>
                 </div>
-                <div class="message-body acrylic">
-                    <div id="feedback">
-                        <!-- Feedback -->
-                    </div>
-                    <div class="field is-grouped">
-                        <p class="control has-icons-left is-expanded">
-                            <input class="input has-background-white-ter"
-                                id="input" type="text" placeholder="Message">
-                            <span class="icon is-small is-left">
-                                <i class="fas fa-comment"></i>
-                            </span>
-                        </p>
-                        <p class="control">
-                            <a class="button is-info" id="sendBTN">Send</a>
-                        </p>
-                    </div>
-                </div>
             </div>
-        </section>
+        </div>
+    </section>
 
-        <script src="js/socket.io.js"></script>
-        <script src="js/client-chat.js"></script>
-    </body>
+    <script src="js/socket.io.js"></script>
+    <script src="js/client-chat.js"></script>
+</body>
 
 </html>

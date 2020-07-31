@@ -53,6 +53,8 @@ io.on("connection", (socket) => {
         into your account or use \"\\register <username> <password>\" to register a new one.`
     })
 
+    //socket.emit("user-count", io.clients().length) //Fix online clients
+
     socket.on("message", (data) => {
         if (typeof data.text != undefined && data.text !== "") {
             console.log("\"" + data.text + "\"");
