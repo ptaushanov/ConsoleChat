@@ -6,5 +6,6 @@
     "\\list",
     "\\rewind",
     "\\clear",
-    "\\set"
+    "\\set",
+    "\\join"
 ]

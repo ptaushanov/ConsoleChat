@@ -1,6 +1,7 @@
 const moment = require("moment");
 const mongo = require("mongodb");
 
+// Importing secrets from .env
 require('dotenv').config();
 
 // Database using MongoDB
@@ -8,9 +9,13 @@ const MongoClient = mongo.MongoClient;
 const URI = process.env.DB_URI;
 const DB = process.env.DB_NAME;
 
+// Rewind cmdlet
 exports.rewind = (socket, ...args) => {
+    const evokerID = activeUsers.findIndex(x => x.sockID === socket.id)
+    const channelName = activeUsers[evokerID].channel;
 
-    if (activeUsers.findIndex(x => x.sockID === socket.id) === -1) {
+    // Allow only users that are logged in use this cmdlet
+    if (evokerID === -1) {
         socket.emit("server-error", {
             from: "System",
             message: "Error! You are not logged in!"
@@ -18,6 +23,7 @@ exports.rewind = (socket, ...args) => {
         return;
     }
 
+    // Table of definitions for days
     const definitions = {
         "today": 0,
         "yesterday": 1,
@@ -30,6 +36,7 @@ exports.rewind = (socket, ...args) => {
         "weeks": 7,
     }
 
+    // Send an error if the user does not supply needed arguments
     if (args.length < 1) {
         socket.emit("server-error", {
             from: "System",
@@ -38,39 +45,54 @@ exports.rewind = (socket, ...args) => {
         return;
     }
 
+    // If first argument is a message 
     if (args[0] === "messages") {
+        // Get an array from all definition keys
         const keys = Object.keys(definitions);
+        let defLock = false;
+        let multLock = false;
         let rewindDays = 1;
+
+        // Loop through all arguments and check if the keys array includes them 
         for (let idx = 1; idx < args.length; idx++) {
-            if (keys.includes(args[idx])) {
+            if (keys.includes(args[idx]) && !defLock) {
+                // If it does multiply the value of the definition with the rewindDays
                 rewindDays *= definitions[args[idx]];
-            } else if (!isNaN(args[idx])) {
+                defLock = true;
+            } else if (!isNaN(args[idx]) && !multLock) {
+                // If it does't check if the argument is a number and if it is then multiply
                 rewindDays *= parseInt(args[idx]);
+                multLock = true;
             }
             console.log(rewindDays);
         }
+
+        // Send an error if the rewind days are more then 14
         if (rewindDays > 14) {
             socket.emit("server-error", {
                 from: "System",
                 message: `Error! You can rewind messages up to 14 days only!`
             })
         } else {
-            // Send messages to user 
             try {
+                // Create a reference date 
                 const lookupDate = moment()
                     .subtract(rewindDays, "days")
                     .format("YYYY-MM-DD")
 
                 console.log(lookupDate);
 
+                // Setup the DB client
                 const client = new MongoClient(URI, {
                     useNewUrlParser: true,
                     useUnifiedTopology: true
                 });
 
+                // Connect to DB through client
                 client.connect((err) => {
                     const db = client.db(DB);
 
+                    // Log any errors
                     if (err) {
                         console.error(err);
                     }
@@ -78,7 +100,7 @@ exports.rewind = (socket, ...args) => {
                     // Database logic
                     db.collection("Channels")
                         .find({
-                            name: "General",
+                            name: channelName, // Current channel of evoker
                             messages: {
                                 $elemMatch: {
                                     date: {
@@ -103,6 +125,8 @@ exports.rewind = (socket, ...args) => {
                         .catch(err => {
                             console.error(err);
                         })
+
+                    // Close the client
                     client.close();
                 })
             } catch (err) {
@@ -110,6 +134,7 @@ exports.rewind = (socket, ...args) => {
             }
         }
     } else {
+        // Send an error if the arguments are wrong
         socket.emit("server-error", {
             from: "System",
             message: `Error! Unknown paramiter \"${args[0]}\"!`
