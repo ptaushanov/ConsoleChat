@@ -18,7 +18,7 @@ Chat application for chatting and running commands in a console like environment
 * [Bcrypt](https://www.npmjs.com/package/bcrypt)
 * [MongoDB](https://www.mongodb.com/)
 
-* [NodeJS] (https://nodejs.org/en/)
+* [NodeJS](https://nodejs.org/en/)
 * [Nodemon](https://www.npmjs.com/package/nodemon)
 
 #### Styles provided by:
