@@ -146,16 +146,18 @@ const manageCommands = (socket, command, ...args) => {
                 from: "System",
                 message: `Error! "\\${command}" is not a valid command!`
             })
-        } else {
-            try {
-                const docCMD = require(pathCMD);
-                docCMD[command](socket, ...args);
-            } catch {
-                socket.emit("server-error", {
-                    from: "System",
-                    message: `Error! "Wrong letter capitalization in command or corrupted cmdlet!`
-                })
-            }
+            return;
         }
+
+        try {
+            const docCMD = require(pathCMD);
+            docCMD[command](socket, ...args);
+        } catch {
+            socket.emit("server-error", {
+                from: "System",
+                message: `Error! "Wrong letter capitalization in command or corrupted cmdlet!`
+            })
+        }
+
     });
 }
